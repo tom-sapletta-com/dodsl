@@ -35,6 +35,12 @@ apps/
 └── dodsl-service     CLI, HTTP API and composition root
 ```
 
+The workspace consumes `onlydsl-contracts` from an immutable onlyDSL Git
+revision. doDSL owns its request and artifact contracts, while canonical
+semantic hashing and future shared SSOT/IFURI types remain owned by the kernel.
+The dependency points from doDSL to onlyDSL contracts, never in the opposite
+direction.
+
 Allowed dependency graph:
 
 ```text

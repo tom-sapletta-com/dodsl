@@ -1,6 +1,6 @@
 # doDSL — aktualnie uruchomiona usługa
 
-> Plik tymczasowy. Stan sprawdzony: `2026-08-08T21:41:32+02:00`.
+> Plik tymczasowy. Stan sprawdzony: `2026-08-08T22:24:07+02:00`.
 
 ## Usługa
 
@@ -74,8 +74,9 @@ ArtifactIntent candidate: artifact-bf182f2461e4c2dc2dda
 research gaps: 8
 research execution: not_performed
 workspace packages: 5 independently buildable distributions
-doDSL tests: 23 passed
-onlyDSL regression tests: 97 passed
+kernel contracts: onlydsl-contracts 0.0.8 @ onlyDSL 424f70e
+doDSL tests: 24 passed
+onlyDSL regression tests: 101 passed
 ```
 
 Status projektu:

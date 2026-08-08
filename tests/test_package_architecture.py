@@ -74,6 +74,14 @@ def test_legacy_public_imports_remain_compatible_during_package_migration():
     ))
 
 
+def test_dodsl_uses_kernel_canonical_hash_contract_without_copying_it():
+    from dodsl_contracts.hashing import canonical_hash
+    from onlydsl_contracts.dsl.common import canonical_hash as kernel_canonical_hash
+
+    assert canonical_hash is kernel_canonical_hash
+    assert canonical_hash({"b": 2, "a": 1}) == kernel_canonical_hash({"a": 1, "b": 2})
+
+
 def test_process_registry_points_to_extracted_implementations_and_new_invariant_name():
     registry = json.loads((ROOT / "process-packs/registry.v1.json").read_text(encoding="utf-8"))
     executors = {item.get("executor", "") for item in registry["operations"]}

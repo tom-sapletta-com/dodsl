@@ -17,6 +17,7 @@ dodsl-adapters = {workspace = true}
 dodsl-contracts = {workspace = true}
 dodsl-core = {workspace = true}
 dodsl-planning = {workspace = true}
+onlydsl-contracts = {git = "https://github.com/tom-sapletta-com/onlyDSL.git", rev = "424f70e", subdirectory = "packages/onlydsl-contracts"}
 f2md = {git = "https://github.com/bioxfoundry/twin-dsl.git", rev = "b4bf25d5e1903b0a215d37285becc98ee9b48d50", subdirectory = "py/f2md"}
 
 [dependency-groups]

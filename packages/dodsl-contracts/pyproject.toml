@@ -9,7 +9,7 @@ description = "Pure contracts and DSL models for doDSL"
 readme = "README.md"
 requires-python = ">=3.11"
 license = "Apache-2.0"
-dependencies = []
+dependencies = ["onlydsl-contracts==0.0.8"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
