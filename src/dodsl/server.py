@@ -14,6 +14,7 @@ from .model import ProjectRequest
 from .service import DoDslService
 
 PROJECT_PATH_RE = re.compile(r"^/v1/projects/([a-z][a-z0-9-]{1,62})(?:/(ingest|compile|reconcile))?$")
+ARTIFACT_INTENT_PATH_RE = re.compile(r"^/v1/projects/([a-z][a-z0-9-]{1,62})/artifact-intents$")
 
 
 class DoDslHandler(BaseHTTPRequestHandler):
@@ -62,6 +63,13 @@ class DoDslHandler(BaseHTTPRequestHandler):
         if self.command == "POST" and self.path == "/v1/projects":
             request = ProjectRequest.from_dict(self._json_body())
             self._send(HTTPStatus.CREATED, self.dodsl.create(request))
+            return
+        artifact_match = ARTIFACT_INTENT_PATH_RE.fullmatch(self.path)
+        if self.command == "POST" and artifact_match:
+            self._send(
+                HTTPStatus.CREATED,
+                self.dodsl.plan_artifact(artifact_match.group(1), self._json_body()),
+            )
             return
         match = PROJECT_PATH_RE.fullmatch(self.path)
         if not match:

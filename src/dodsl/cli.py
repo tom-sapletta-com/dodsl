@@ -40,6 +40,9 @@ def build_parser() -> argparse.ArgumentParser:
     upload.add_argument("project_id")
     upload.add_argument("path")
     upload.add_argument("--trust-role", default="customer")
+    artifact = commands.add_parser("plan-artifact")
+    artifact.add_argument("project_id")
+    artifact.add_argument("proposal")
     server = commands.add_parser("serve")
     server.add_argument("--host", default=os.getenv("DODSL_HOST", "127.0.0.1"))
     server.add_argument("--port", type=int, default=int(os.getenv("DODSL_PORT", "8788")))
@@ -67,6 +70,8 @@ def main(argv: list[str] | None = None) -> int:
             _print(dodsl.status(args.project_id))
         elif args.command == "import-file":
             _print(dodsl.import_file(args.project_id, args.path, trust_role=args.trust_role))
+        elif args.command == "plan-artifact":
+            _print(dodsl.plan_artifact(args.project_id, json.loads(Path(args.proposal).read_text(encoding="utf-8"))))
         return 0
     except (DoDslError, OSError, json.JSONDecodeError) as exc:
         _print({"error": type(exc).__name__, "message": str(exc)})

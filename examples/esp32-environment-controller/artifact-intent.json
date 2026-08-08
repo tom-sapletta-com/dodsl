@@ -1,0 +1,30 @@
+{
+  "schema": "dodsl.artifact-intent-proposal/v1",
+  "projectId": "esp32-environment-controller",
+  "baseKnowledgeHash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+  "outputs": ["schematic", "pcb", "pcb-3d", "enclosure", "3mf", "stl", "openusd"],
+  "producer": {
+    "kind": "human",
+    "name": "project-owner"
+  },
+  "requirements": [
+    {
+      "id": "main-controller",
+      "kind": "component",
+      "subject": "main-controller",
+      "claim": "ESP32-S3 module providing Wi-Fi and application control",
+      "requiredEvidence": ["manufacturer", "mpn", "datasheet", "supply-range", "package", "pinout", "footprint", "dimensions", "3d-model"]
+    },
+    {
+      "id": "board-envelope",
+      "kind": "geometry",
+      "subject": "controller-pcb",
+      "claim": "PCB must fit within the declared manufacturing envelope",
+      "requiredEvidence": ["dimensions", "manufacturing-profile"],
+      "constraints": [
+        {"parameter": "width", "operator": "max", "value": 90, "unit": "mm"},
+        {"parameter": "height", "operator": "max", "value": 60, "unit": "mm"}
+      ]
+    }
+  ]
+}

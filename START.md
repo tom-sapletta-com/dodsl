@@ -1,6 +1,6 @@
 # doDSL — aktualnie uruchomiona usługa
 
-> Plik tymczasowy. Stan sprawdzony: `2026-08-08T21:11:00+02:00`.
+> Plik tymczasowy. Stan sprawdzony: `2026-08-08T21:17:49+02:00`.
 
 ## Usługa
 
@@ -40,6 +40,7 @@ GET  /v1/projects/{project-id}
 POST /v1/projects/{project-id}/ingest
 POST /v1/projects/{project-id}/compile
 POST /v1/projects/{project-id}/reconcile
+POST /v1/projects/{project-id}/artifact-intents
 ```
 
 Jeżeli `DODSL_API_TOKEN` jest ustawiony, należy dodać nagłówek:
@@ -69,6 +70,9 @@ todo2code: compiled
 SSOT candidate: created and validated
 candidate id: dodsl-b1465c0e368707d1-cc0f8cc4
 SSOT promotion: not_performed
+ArtifactIntent candidate: artifact-bf182f2461e4c2dc2dda
+research gaps: 8
+research execution: not_performed
 ```
 
 Status projektu:
@@ -104,7 +108,8 @@ docker compose logs --tail=200 dodsl
 
 ## Granica aktualnej wersji
 
-P0–P2 działa: intake, normalizacja wiedzy i kandydat SSOT. P3–P10 — research
-komponentów, KiCad/ERC/DRC, CAD, STL/3MF, rekonstrukcja ze zdjęć i OpenUSD — są
-opisane w `docs/IMPLEMENTATION_PLAN.md`, ale nie są jeszcze adapterami wykonawczymi
-wersji `0.1.0`. doDSL nie raportuje tych artefaktów jako gotowych.
+P0–P2 działa: intake, normalizacja wiedzy i kandydat SSOT. Fundament P3 tworzy
+typowany ArtifactIntent, ResearchGapDSL i ResearchPlanDSL, ale celowo nie wykonuje
+jeszcze researchu. KiCad/ERC/DRC, CAD, STL/3MF, rekonstrukcja ze zdjęć i OpenUSD
+są opisane w `docs/IMPLEMENTATION_PLAN.md`, ale nie są jeszcze adapterami
+wykonawczymi wersji `0.1.0`. doDSL nie raportuje tych artefaktów jako gotowych.

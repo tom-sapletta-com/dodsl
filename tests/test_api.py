@@ -8,6 +8,7 @@ from http.server import ThreadingHTTPServer
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
+from dodsl.io import atomic_write_json
 from dodsl.server import DoDslHandler
 from dodsl.service import DoDslService
 
@@ -47,6 +48,44 @@ class ApiTests(unittest.TestCase):
         with self.assertRaises(HTTPError) as caught:
             urlopen(invalid)
         self.assertEqual(caught.exception.code, 422)
+
+    def test_artifact_intent_endpoint_only_stages_typed_candidate(self):
+        request_value = {
+            "schema": "dodsl-request/v1", "projectId": "api-plan", "title": "API Plan",
+            "gitSources": [], "webSources": [], "artifacts": ["ssot", "pcb"],
+        }
+        create = Request(
+            self.base + "/v1/projects", method="POST", data=json.dumps(request_value).encode(),
+            headers={"Content-Type": "application/json"},
+        )
+        with urlopen(create):
+            pass
+        knowledge_hash = "sha256:" + "d" * 64
+        workspace = self.server.dodsl.workspace("api-plan")
+        atomic_write_json(workspace.root / "source-md-dsl/knowledge-manifest.json", {
+            "schema": "dodsl-knowledge-manifest/v1", "projectId": "api-plan",
+            "semanticHash": knowledge_hash,
+        })
+        proposal = {
+            "schema": "dodsl.artifact-intent-proposal/v1", "projectId": "api-plan",
+            "baseKnowledgeHash": knowledge_hash, "outputs": ["pcb"],
+            "producer": {"kind": "human", "name": "owner"},
+            "requirements": [{
+                "id": "controller", "kind": "component", "subject": "controller",
+                "claim": "Documented controller", "requiredEvidence": ["datasheet", "pinout"],
+            }],
+        }
+        stage = Request(
+            self.base + "/v1/projects/api-plan/artifact-intents", method="POST",
+            data=json.dumps(proposal).encode(), headers={"Content-Type": "application/json"},
+        )
+        with urlopen(stage) as response:
+            receipt = json.load(response)
+        self.assertEqual(response.status, 201)
+        self.assertEqual(receipt["execution"], "not_performed")
+        self.assertEqual(receipt["researchGaps"], 2)
+        status = self.server.dodsl.status("api-plan")
+        self.assertEqual(status["lastIteration"]["stage"], "artifact_intent_planned")
 
 
 if __name__ == "__main__":

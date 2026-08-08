@@ -8,7 +8,7 @@ then asks onlyDSL to stage an SSOT candidate.
 doDSL never promotes `SSOT/current`, executes model-provided commands, invents a
 process URI, changes AQL, or treats an LLM response as evidence.
 
-## Implemented vertical slice (P0-P2)
+## Implemented vertical slice (P0-P3 foundation)
 
 ```text
 explicit request
@@ -20,6 +20,8 @@ explicit request
   -> source-md-dsl   (knowledge index + f2md intents + todo2code graph)
   -> onlydsl ssot reconcile
   -> SSOT/candidate  (never automatic promotion)
+  -> typed ArtifactIntent proposal bound to the current knowledge hash
+  -> ResearchGapDSL + ResearchPlanDSL (no execution)
 ```
 
 Raw HTML is the primary source. Markdown is a derived projection, not a
@@ -48,6 +50,7 @@ dodsl --projects-root ./projects import-file my-project enclosure-front.jpg
 dodsl --projects-root ./projects compile my-project --require-todo2code
 dodsl --projects-root ./projects reconcile my-project
 dodsl --projects-root ./projects status my-project
+dodsl --projects-root ./projects plan-artifact my-project artifact-intent.json
 ```
 
 `reconcile` only creates and validates a candidate. Promotion remains an
@@ -79,6 +82,7 @@ GET  /v1/projects/{id}
 POST /v1/projects/{id}/ingest
 POST /v1/projects/{id}/compile
 POST /v1/projects/{id}/reconcile
+POST /v1/projects/{id}/artifact-intents
 ```
 
 Set `DODSL_API_TOKEN` outside local development to require a Bearer token.
@@ -96,6 +100,11 @@ Set `DODSL_API_TOKEN` outside local development to require a Bearer token.
   claims; it does not interpret free-form requests.
 - Free-form user text is preserved but remains `waiting_interpretation`; doDSL
   does not replace a missing LLM interpretation with keyword heuristics.
+- Human or LLM artifact proposals must use the strict
+  `dodsl.artifact-intent-proposal/v1` contract and bind the current knowledge
+  hash. LLM proposals require model and response-hash provenance.
+- Artifact planning writes only `.dodsl/queue`; it neither executes research
+  operations nor writes `SSOT/current`.
 - Only a system-owned process registry maps operations to executable adapters.
 - SSOT evidence uses content-addressed `urn:*:sha256:<64-hex>` identifiers.
 

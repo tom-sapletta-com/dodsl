@@ -146,6 +146,22 @@ onlydsl ssot promote <candidate> \
 
 ## 5. P3 — research planner
 
+### Implemented foundation
+
+The first P3 boundary is operational:
+
+- strict `dodsl.artifact-intent-proposal/v1` validation;
+- proposal binding to the current knowledge semantic hash;
+- explicit human/LLM producer provenance;
+- deterministic `ArtifactIntentDSL`, `ResearchGapDSL` and `ResearchPlanDSL`;
+- one typed gap per explicitly required evidence field;
+- system-owned operation name with no model-provided executable URI;
+- staging under `.dodsl/queue/artifact-intent` with `execution: not_performed`
+  and `ssotPromotion: not_performed`.
+
+The DQL execution adapter and evidence-backed `ComponentDSL` acceptance remain
+the next P3 increment. A generated research plan is not yet a research result.
+
 ### New contracts
 
 ```text

@@ -8,6 +8,7 @@ from . import __version__
 from .io import atomic_write_json, utc_now
 from .knowledge import KnowledgeCompiler
 from .model import ProjectRequest
+from .planning import ArtifactPlanningService
 from .sources import GitSnapshotter, UploadImporter, WebSnapshotter
 from .ssot import SsotBridge
 from .workspace import ProjectWorkspace
@@ -18,6 +19,7 @@ class DoDslService:
         self, projects_root: str | Path, *, git: GitSnapshotter | None = None,
         web: WebSnapshotter | None = None, uploads: UploadImporter | None = None,
         compiler: KnowledgeCompiler | None = None, ssot: SsotBridge | None = None,
+        planning: ArtifactPlanningService | None = None,
     ):
         self.projects_root = Path(projects_root).resolve()
         self.git = git or GitSnapshotter()
@@ -25,6 +27,7 @@ class DoDslService:
         self.uploads = uploads or UploadImporter()
         self.compiler = compiler or KnowledgeCompiler()
         self.ssot = ssot or SsotBridge()
+        self.planning = planning or ArtifactPlanningService()
 
     def workspace(self, project_id: str) -> ProjectWorkspace:
         return ProjectWorkspace(self.projects_root, project_id)
@@ -69,6 +72,14 @@ class DoDslService:
             atomic_write_json(workspace.root / ".dodsl/runtime/latest-ssot-candidate.json", recorded)
             return recorded
 
+    def plan_artifact(self, project_id: str, proposal: Any) -> dict[str, Any]:
+        workspace = self.workspace(project_id)
+        workspace.request()
+        with workspace.writer_lock():
+            receipt = self.planning.stage(workspace, proposal)
+            atomic_write_json(workspace.root / ".dodsl/runtime/latest-artifact-plan.json", receipt)
+            return receipt
+
     def run(self, request: ProjectRequest, *, require_todo2code: bool = False, reconcile: bool = True) -> dict[str, Any]:
         self.create(request)
         intake = self.ingest(request.project_id)
@@ -94,6 +105,7 @@ class DoDslService:
             ("sources_captured", "latest-intake.json", "completedAt"),
             ("knowledge_compiled", "latest-compile.json", "completedAt"),
             ("ssot_candidate_validated", "latest-ssot-candidate.json", "recordedAt"),
+            ("artifact_intent_planned", "latest-artifact-plan.json", "recordedAt"),
         ):
             path = runtime / filename
             if not path.is_file():
@@ -111,11 +123,16 @@ class DoDslService:
                     "candidateId": value.get("candidateId"),
                 })
         last_iteration = max(iterations, key=lambda item: item["at"]) if iterations else None
+        artifact_candidates = sum(
+            1 for path in (workspace.root / ".dodsl/queue/artifact-intent").glob("artifact-*")
+            if path.is_dir()
+        )
         return {
             "schema": "dodsl-project-status/v1", "projectId": project_id,
             "serviceVersion": __version__, "lastIteration": last_iteration,
             "title": request.title, "workspace": str(workspace.root),
             "sources": source_files, "markdown": markdown_files, "dsl": dsl_files,
+            "artifactIntentCandidates": artifact_candidates,
             "interpretation": "waiting_interpretation" if request.request_text else "not_required",
             "ssot": ssot_status,
         }

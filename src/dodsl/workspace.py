@@ -40,6 +40,7 @@ class ProjectWorkspace:
             "source-md-dsl/documentation", "source-md-dsl/geometry", "source-md-dsl/electronics",
             "source-md-dsl/intent", "source-md-dsl/contracts", "artifact/pcb", "artifact/cad", "artifact/print",
             "artifact/digital-twin", "artifact/docs", ".dodsl/locks", ".dodsl/runtime",
+            ".dodsl/queue/artifact-intent",
             ".onlydsl/authority/grants", ".onlydsl/cache", ".onlydsl/queue", ".onlydsl/runtime",
         ):
             (self.root / relative).mkdir(parents=True, exist_ok=True)
@@ -52,7 +53,10 @@ class ProjectWorkspace:
         atomic_write_text(self.root / "source-md-dsl/contracts/trust.dsl", render_trust_policy(request))
         if request.request_text:
             atomic_write_text(self.root / "source/uploads/request.md", request.request_text.rstrip() + "\n")
-        atomic_write_text(self.root / ".gitignore", ".dodsl/runtime/\n.onlydsl/cache/\n.onlydsl/queue/\n.onlydsl/runtime/\n")
+        atomic_write_text(
+            self.root / ".gitignore",
+            ".dodsl/runtime/\n.dodsl/queue/\n.onlydsl/cache/\n.onlydsl/queue/\n.onlydsl/runtime/\n",
+        )
 
     def request(self) -> ProjectRequest:
         if not self.request_path.is_file():
