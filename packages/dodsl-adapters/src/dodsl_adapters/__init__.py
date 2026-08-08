@@ -5,7 +5,7 @@ from importlib.metadata import PackageNotFoundError, version
 try:
     __version__ = version("dodsl-adapters")
 except PackageNotFoundError:
-    __version__ = "0.1.0"
+    __version__ = "0.2.0"
 
 from .knowledge import KnowledgeCompiler
 from .sources import GitSnapshotter, UploadImporter, WebSnapshotter

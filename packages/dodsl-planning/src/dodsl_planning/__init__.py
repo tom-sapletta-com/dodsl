@@ -5,7 +5,7 @@ from importlib.metadata import PackageNotFoundError, version
 try:
     __version__ = version("dodsl-planning")
 except PackageNotFoundError:
-    __version__ = "0.1.0"
+    __version__ = "0.2.0"
 
 from dodsl_contracts.artifact_intent import ArtifactIntentProposal
 from .planner import ArtifactPlanningService

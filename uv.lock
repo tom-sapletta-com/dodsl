@@ -160,7 +160,7 @@ wheels = [
 
 [[package]]
 name = "dodsl"
-version = "0.1.0"
+version = "0.2.0"
 source = { editable = "apps/dodsl-service" }
 dependencies = [
     { name = "dodsl-adapters" },
@@ -179,7 +179,7 @@ requires-dist = [
 
 [[package]]
 name = "dodsl-adapters"
-version = "0.1.0"
+version = "0.2.0"
 source = { editable = "packages/dodsl-adapters" }
 dependencies = [
     { name = "dodsl-contracts" },
@@ -198,18 +198,18 @@ requires-dist = [
 
 [[package]]
 name = "dodsl-contracts"
-version = "0.1.0"
+version = "0.2.0"
 source = { editable = "packages/dodsl-contracts" }
 dependencies = [
     { name = "onlydsl-contracts" },
 ]
 
 [package.metadata]
-requires-dist = [{ name = "onlydsl-contracts", git = "https://github.com/tom-sapletta-com/onlyDSL.git?subdirectory=packages%2Fonlydsl-contracts&rev=9d89195" }]
+requires-dist = [{ name = "onlydsl-contracts", git = "https://github.com/tom-sapletta-com/onlyDSL.git?subdirectory=packages%2Fonlydsl-contracts&rev=5983bae" }]
 
 [[package]]
 name = "dodsl-core"
-version = "0.1.0"
+version = "0.2.0"
 source = { editable = "packages/dodsl-core" }
 dependencies = [
     { name = "dodsl-contracts" },
@@ -220,7 +220,7 @@ requires-dist = [{ name = "dodsl-contracts", editable = "packages/dodsl-contract
 
 [[package]]
 name = "dodsl-planning"
-version = "0.1.0"
+version = "0.2.0"
 source = { editable = "packages/dodsl-planning" }
 dependencies = [
     { name = "dodsl-contracts" },
@@ -235,7 +235,7 @@ requires-dist = [
 
 [[package]]
 name = "dodsl-workspace"
-version = "0.1.0"
+version = "0.2.0"
 source = { virtual = "." }
 dependencies = [
     { name = "dodsl" },
@@ -495,8 +495,8 @@ wheels = [
 
 [[package]]
 name = "onlydsl-contracts"
-version = "0.0.8"
-source = { git = "https://github.com/tom-sapletta-com/onlyDSL.git?subdirectory=packages%2Fonlydsl-contracts&rev=9d89195#9d891953876cc14a5a40498e745ae0f0a829e2d4" }
+version = "0.0.9"
+source = { git = "https://github.com/tom-sapletta-com/onlyDSL.git?subdirectory=packages%2Fonlydsl-contracts&rev=5983bae#5983baeb28c4866b3b51d59606e0624bac4bea04" }
 
 [[package]]
 name = "onnxruntime"

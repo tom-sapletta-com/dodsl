@@ -4,16 +4,16 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dodsl"
-version = "0.1.0"
+version = "0.2.0"
 description = "Governed source-to-SSOT-to-artifact orchestration service"
 readme = "README.md"
 requires-python = ">=3.11"
 license = "Apache-2.0"
 dependencies = [
-  "dodsl-adapters==0.1.0",
-  "dodsl-contracts==0.1.0",
-  "dodsl-core==0.1.0",
-  "dodsl-planning==0.1.0",
+  "dodsl-adapters==0.2.0",
+  "dodsl-contracts==0.2.0",
+  "dodsl-core==0.2.0",
+  "dodsl-planning==0.2.0",
 ]
 
 [project.scripts]

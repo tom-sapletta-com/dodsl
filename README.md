@@ -17,7 +17,7 @@ explicit request
   -> source/web      (raw page.html + headers + manifest)
   -> source/uploads  (byte-preserving import)
   -> source-md       (existing f2md tree conversion)
-  -> source-md-dsl   (knowledge index + f2md intents + todo2code graph)
+  -> source-md-dsl   (knowledge index + f2md intents + todo2code evidence bundle)
   -> onlydsl ssot reconcile
   -> SSOT/candidate  (never automatic promotion)
   -> typed ArtifactIntent proposal bound to the current knowledge hash
@@ -37,7 +37,8 @@ packages/dodsl-adapters   Git, web, f2md, todo2code and onlyDSL adapters
 apps/dodsl-service        CLI, HTTP API and composition root
 ```
 
-`dodsl-contracts` reuses canonical hashing from the independently built
+`dodsl-contracts` reuses canonical hashing and
+`DevelopmentEvidenceBundleDSL` from the independently built
 `onlydsl-contracts` package pinned to an exact onlyDSL source revision. The
 Docker composition also installs `onlydsl-core` and `onlydsl-ssot` from that
 same revision because the read-only onlyDSL CLI bridge uses their compatibility
@@ -103,9 +104,9 @@ docker compose up -d --build
 curl http://127.0.0.1:18788/health
 ```
 
-The image pins the todo2code and f2md source commits. The development Compose
-stack mounts the local onlyDSL checkout read-only because the currently
-published `onlyDSL==0.0.7` wheel predates its SSOT package.
+The image pins todo2code, f2md and the independently buildable onlyDSL contract,
+core and SSOT packages to exact source commits. The development Compose stack
+also mounts the local onlyDSL checkout read-only for its CLI composition layer.
 
 Compose runs doDSL as `${DODSL_UID:-1000}:${DODSL_GID:-1000}` so generated
 Markdown, DSL and SSOT candidates remain readable by the host user. Set both
@@ -132,7 +133,12 @@ Set `DODSL_API_TOKEN` outside local development to require a Bearer token.
 - Production Git intake accepts only credential-free `https://github.com/org/repo`.
 - Web intake blocks private, loopback, link-local and non-global addresses,
   restricts redirects to the original host and caps response size.
-- todo2code is invoked with all semantic LLM stages disabled.
+- todo2code is invoked with all semantic LLM stages disabled. Its graph,
+  diagnostics and semantic run manifest are content-addressed and bound to the
+  exact Git commit/tree in `development-evidence.dsl`. Execution time, run ID
+  and duration remain in `.dodsl/runtime` and cannot perturb the semantic hash.
+- todo2code code-change plans remain proposals with `execution=not_performed`;
+  neither todo2code nor doDSL grants AQL authority or applies their patches.
 - When a pinned f2md release lacks `intent_compile`, doDSL uses its versioned,
   deterministic Markdown evidence compiler. It only creates source-anchored
   claims; it does not interpret free-form requests.

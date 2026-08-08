@@ -64,8 +64,10 @@ class SsotBridge:
             "development/f2md/intent-packs.json": root / "development/f2md/intent-packs.json",
             "development/f2md/compile-report.json": root / "development/f2md/compile-report.json",
         }
-        for path in sorted((root / "development/todo2code").glob("*/*.json")):
-            selected["development/todo2code/" + path.relative_to(root / "development/todo2code").as_posix()] = path
+        todo_root = root / "development/todo2code"
+        for path in sorted(todo_root.glob("*/*")):
+            if path.is_file() and path.suffix.lower() in {".json", ".dsl"}:
+                selected["development/todo2code/" + path.relative_to(todo_root).as_posix()] = path
         missing = [name for name, path in selected.items() if not path.is_file()]
         if missing:
             raise DoDslValidationError("SSOT_SECTION_MISSING:" + ",".join(missing))

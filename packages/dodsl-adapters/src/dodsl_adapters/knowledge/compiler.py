@@ -164,7 +164,7 @@ class KnowledgeCompiler:
             for repository in sorted((source / "git").glob("*/repository")):
                 result = self.todo2code.compile_repository(
                     repository, dsl_stage / "development/todo2code" / repository.parent.name,
-                    workspace_root=workspace.root,
+                    workspace_root=workspace.root, project_id=workspace.project_id,
                 )
                 todo_results[repository.parent.name] = result
                 if result.get("evidenceUri"):
@@ -181,11 +181,15 @@ class KnowledgeCompiler:
                 "urn:dodsl:knowledge:sha256:" + knowledge_hash.split(":", 1)[1],
                 "urn:dodsl:compile:sha256:" + semantic_hash.split(":", 1)[1],
             ])
+            semantic_todo_results = {
+                repository: {key: value for key, value in result.items() if key != "executionHash"}
+                for repository, result in todo_results.items()
+            }
             manifest = {
                 "schema": "dodsl-knowledge-manifest/v1", "projectId": workspace.project_id,
                 "knowledgeHash": knowledge_hash, "semanticHash": semantic_hash,
                 "files": semantic_files, "evidenceUris": sorted(set(evidence_uris)),
-                "todo2code": todo_results,
+                "todo2code": semantic_todo_results,
             }
             atomic_write_json(dsl_stage / "knowledge-manifest.json", manifest)
             receipt = {

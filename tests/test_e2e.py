@@ -67,16 +67,25 @@ class EndToEndTests(unittest.TestCase):
             self.assertTrue((workspace / "source-md-dsl/development/f2md/intent-packs.json").is_file())
             if todo_command:
                 self.assertTrue(next((workspace / "source-md-dsl/development/todo2code").rglob("intent.graph.json")).is_file())
+                self.assertTrue(next((workspace / "source-md-dsl/development/todo2code").rglob("development-evidence.dsl")).is_file())
             candidate = dodsl.reconcile(request.project_id)
             self.assertEqual(candidate["promotion"], "not_performed")
             candidate_tree = workspace / "SSOT/candidate" / candidate["candidateId"] / "tree"
             self.assertTrue((candidate_tree / "sources/knowledge-index.dsl").is_file())
+            if todo_command:
+                self.assertTrue(next((candidate_tree / "development/todo2code").rglob("development-evidence.dsl")).is_file())
             self.assertFalse((workspace / "SSOT/current/sources/knowledge-index.dsl").exists())
             status = dodsl.status(request.project_id)
             self.assertTrue(status["ssot"]["verified"])
-            self.assertEqual(status["serviceVersion"], "0.1.0")
+            self.assertEqual(status["serviceVersion"], "0.2.0")
             self.assertEqual(status["lastIteration"]["stage"], "ssot_candidate_validated")
             self.assertEqual(status["lastIteration"]["candidateId"], candidate["candidateId"])
+            if todo_command:
+                self.assertEqual(status["developmentEvidence"]["bundles"], 1)
+                evidence = status["developmentEvidence"]["items"][0]
+                self.assertEqual(evidence["assessment"], "accepted")
+                self.assertEqual(evidence["blockingDiagnostics"], 0)
+                self.assertTrue(evidence["evidenceUri"].startswith("urn:onlydsl:development-evidence:sha256:"))
 
 
 if __name__ == "__main__":

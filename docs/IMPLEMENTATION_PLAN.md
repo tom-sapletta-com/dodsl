@@ -160,6 +160,10 @@ Implemented:
 - canonical f2md intent packs with logical doDSL URIs, not host paths;
 - todo2code deterministic pipeline for each cloned repository;
 - todo2code execution metadata removed from its accepted semantic projection;
+- kernel-owned `DevelopmentEvidenceBundleDSL` binds the exact Git commit/tree
+  to immutable graph, diagnostic and semantic-manifest URNs;
+- todo2code plans remain non-executed proposals; AQL authority and mutation
+  receipts stay outside todo2code and doDSL;
 - aggregate knowledge/compile evidence URNs.
 
 The f2md Markdown front matter deliberately retains converter runtime data.

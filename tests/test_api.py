@@ -87,6 +87,28 @@ class ApiTests(unittest.TestCase):
         status = self.server.dodsl.status("api-plan")
         self.assertEqual(status["lastIteration"]["stage"], "artifact_intent_planned")
 
+    def test_status_reports_malformed_development_evidence_with_specific_code(self):
+        request_value = {
+            "schema": "dodsl-request/v1", "projectId": "api-evidence", "title": "API Evidence",
+            "gitSources": [], "webSources": [], "artifacts": ["ssot"],
+        }
+        create = Request(
+            self.base + "/v1/projects", method="POST", data=json.dumps(request_value).encode(),
+            headers={"Content-Type": "application/json"},
+        )
+        with urlopen(create):
+            pass
+        workspace = self.server.dodsl.workspace("api-evidence")
+        malformed = workspace.root / "source-md-dsl/development/todo2code/repository/development-evidence.dsl"
+        malformed.parent.mkdir(parents=True)
+        malformed.write_text("```developmentevidencedsl\nBROKEN\n```\n", encoding="utf-8")
+        status = self.server.dodsl.status("api-evidence")
+        self.assertEqual(status["developmentEvidence"]["invalid"], 1)
+        self.assertEqual(
+            status["developmentEvidence"]["issues"][0]["code"],
+            "DEVELOPMENT_EVIDENCE_BUNDLE_INVALID",
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

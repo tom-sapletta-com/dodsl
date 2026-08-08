@@ -6,6 +6,7 @@ from typing import Any
 
 from dodsl_adapters import GitSnapshotter, KnowledgeCompiler, SsotBridge, UploadImporter, WebSnapshotter
 from dodsl_contracts.model import ProjectRequest
+from dodsl_contracts.development_evidence import parse_development_evidence
 from dodsl_core.io import atomic_write_json, utc_now
 from dodsl_core.ports import (
     ArtifactPlanningPort,
@@ -134,12 +135,43 @@ class DoDslService:
             1 for path in (workspace.root / ".dodsl/queue/artifact-intent").glob("artifact-*")
             if path.is_dir()
         )
+        development_bundles = []
+        invalid_development_bundles: list[dict[str, str]] = []
+        for path in sorted((workspace.root / "source-md-dsl/development/todo2code").glob("*/development-evidence.dsl")):
+            try:
+                development_bundles.append(parse_development_evidence(path.read_text(encoding="utf-8")))
+            except (OSError, ValueError) as exc:
+                invalid_development_bundles.append({
+                    "code": "DEVELOPMENT_EVIDENCE_BUNDLE_INVALID",
+                    "path": path.relative_to(workspace.root).as_posix(),
+                    "detail": f"{type(exc).__name__}:{exc}"[:500],
+                })
+        development_evidence = {
+            "bundles": len(development_bundles),
+            "invalid": len(invalid_development_bundles),
+            "accepted": sum(item.assessment == "accepted" for item in development_bundles),
+            "incomplete": sum(item.assessment == "incomplete" for item in development_bundles),
+            "blockingDiagnostics": sum(item.blocking_diagnostics for item in development_bundles),
+            "items": [{
+                "repositoryId": item.repository_id,
+                "repositoryRevision": item.repository_revision,
+                "producer": item.producer,
+                "producerVersion": item.producer_version,
+                "assessment": item.assessment,
+                "blockingDiagnostics": item.blocking_diagnostics,
+                "warningDiagnostics": item.warning_diagnostics,
+                "semanticHash": item.semantic_hash,
+                "evidenceUri": item.evidence_uri,
+            } for item in development_bundles[:100]],
+            "issues": invalid_development_bundles[:100],
+        }
         return {
             "schema": "dodsl-project-status/v1", "projectId": project_id,
             "serviceVersion": __version__, "lastIteration": last_iteration,
             "title": request.title, "workspace": str(workspace.root),
             "sources": source_files, "markdown": markdown_files, "dsl": dsl_files,
             "artifactIntentCandidates": artifact_candidates,
+            "developmentEvidence": development_evidence,
             "interpretation": "waiting_interpretation" if request.request_text else "not_required",
             "ssot": ssot_status,
         }
