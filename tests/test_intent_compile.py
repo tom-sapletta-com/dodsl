@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 
-from dodsl.knowledge.intent_compile import COMPILER_ID, compile_tree
+from dodsl_adapters.knowledge.intent_compile import COMPILER_ID, compile_tree
 
 
 def test_local_evidence_compiler_is_deterministic_and_source_anchored(tmp_path):

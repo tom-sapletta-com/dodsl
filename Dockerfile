@@ -20,7 +20,12 @@ RUN python3 -m venv /opt/dodsl-venv \
 
 WORKDIR /app
 COPY . .
-RUN /opt/dodsl-venv/bin/pip install --no-cache-dir --no-deps .
+RUN /opt/dodsl-venv/bin/pip install --no-cache-dir --no-deps \
+      ./packages/dodsl-contracts \
+      ./packages/dodsl-core \
+      ./packages/dodsl-planning \
+      ./packages/dodsl-adapters \
+      ./apps/dodsl-service
 
 ENV PATH="/opt/dodsl-venv/bin:${PATH}" \
     DODSL_PROJECTS_ROOT=/data/projects \

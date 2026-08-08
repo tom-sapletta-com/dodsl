@@ -7,12 +7,12 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from dodsl.knowledge import KnowledgeCompiler
-from dodsl.knowledge.todo2code import Todo2CodeAdapter
-from dodsl.model import ProjectRequest
+from dodsl_adapters.knowledge import KnowledgeCompiler
+from dodsl_adapters.knowledge.todo2code import Todo2CodeAdapter
+from dodsl_adapters.sources import GitSnapshotter, WebSnapshotter
+from dodsl_adapters.ssot import SsotBridge
+from dodsl_contracts.model import ProjectRequest
 from dodsl.service import DoDslService
-from dodsl.sources import GitSnapshotter, WebSnapshotter
-from dodsl.ssot import SsotBridge
 
 
 ROOT = Path(__file__).resolve().parents[1]

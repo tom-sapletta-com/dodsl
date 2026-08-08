@@ -20,6 +20,46 @@ The first implementation milestone is intentionally P0-P2. A source ingestion
 service must be reproducible and governed before it is allowed to manufacture a
 PCB or printable object.
 
+### Package ownership
+
+The repository is a uv workspace with independently buildable distributions:
+
+```text
+packages/
+├── dodsl-contracts   schemas, models, validators, semantic hashes, DSL
+├── dodsl-core        workspace, atomic IO, dependency ports
+├── dodsl-planning    ArtifactIntent and research candidate planning
+└── dodsl-adapters    source, knowledge and onlyDSL SSOT adapters
+
+apps/
+└── dodsl-service     CLI, HTTP API and composition root
+```
+
+Allowed dependency graph:
+
+```text
+dodsl-contracts -> dodsl-core
+dodsl-contracts + dodsl-core -> dodsl-planning
+dodsl-contracts + dodsl-core -> dodsl-adapters
+contracts + core + planning + adapters -> dodsl-service
+```
+
+In exact import terms, `contracts` has no internal dependencies; `core` imports
+only contracts; planning and adapters import contracts/core but not each other;
+the service is the only composition root. `tests/test_package_architecture.py`
+fails when an upward dependency or application import crosses that boundary.
+
+The system-owned process registry points to extracted implementation packages,
+not compatibility exports in `dodsl.*`. Compatibility modules exist for one
+migration period and do not define authority.
+
+Further packages should be extracted when their first executable vertical
+slice exists, rather than added as empty placeholders. Expected boundaries are
+`dodsl-research`, `dodsl-electronics`, `dodsl-cad`, `dodsl-twin` and
+`dodsl-verification`. Each must own contracts or execution logic that can be
+built and tested independently; authority and application composition remain
+outside those packages.
+
 ## 2. End-to-end state machine
 
 ```text
@@ -69,7 +109,7 @@ projects/<project-id>/
 │   └── development/{f2md,todo2code}/
 ├── SSOT/{current,candidate,receipts,revisions,manifest.dsl}
 ├── artifact/{pcb,cad,print,digital-twin,docs}/
-├── .dodsl/{locks,runtime}/
+├── .dodsl/{locks,runtime,queue}/
 └── .onlydsl/{authority,cache,queue,runtime}/
 ```
 

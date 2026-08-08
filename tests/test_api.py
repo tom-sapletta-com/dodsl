@@ -8,7 +8,7 @@ from http.server import ThreadingHTTPServer
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
-from dodsl.io import atomic_write_json
+from dodsl_core.io import atomic_write_json
 from dodsl.server import DoDslHandler
 from dodsl.service import DoDslService
 

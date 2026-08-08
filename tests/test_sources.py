@@ -8,10 +8,10 @@ import unittest
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-from dodsl.errors import DoDslValidationError
-from dodsl.model import GitSource, ProjectRequest, WebSource
-from dodsl.sources import GitSnapshotter, WebSnapshotter
-from dodsl.workspace import ProjectWorkspace
+from dodsl_adapters.sources import GitSnapshotter, WebSnapshotter
+from dodsl_contracts.errors import DoDslValidationError
+from dodsl_contracts.model import GitSource, ProjectRequest, WebSource
+from dodsl_core.workspace import ProjectWorkspace
 
 
 class _Page(BaseHTTPRequestHandler):

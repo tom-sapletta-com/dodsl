@@ -3,12 +3,13 @@ from __future__ import annotations
 import json
 import tempfile
 import unittest
+from importlib.resources import files
 from pathlib import Path
 
-from dodsl.dsl import KnowledgeDocument, render_knowledge_index, render_project_dodsl, render_trust_policy
-from dodsl.errors import DoDslValidationError
-from dodsl.model import ProjectRequest
-from dodsl.workspace import ProjectWorkspace
+from dodsl_contracts.dsl import KnowledgeDocument, render_knowledge_index, render_project_dodsl, render_trust_policy
+from dodsl_contracts.errors import DoDslValidationError
+from dodsl_contracts.model import ProjectRequest
+from dodsl_core.workspace import ProjectWorkspace
 
 
 def request_value(**updates):
@@ -24,6 +25,13 @@ def request_value(**updates):
 
 
 class ContractTests(unittest.TestCase):
+    def test_distribution_contains_versioned_json_schemas(self):
+        schemas = files("dodsl_contracts").joinpath("schemas")
+        request_schema = json.loads(schemas.joinpath("dodsl-request.schema.json").read_text(encoding="utf-8"))
+        artifact_schema = json.loads(schemas.joinpath("artifact-intent-proposal.schema.json").read_text(encoding="utf-8"))
+        self.assertEqual(request_schema["properties"]["schema"]["const"], "dodsl-request/v1")
+        self.assertEqual(artifact_schema["properties"]["schema"]["const"], "dodsl.artifact-intent-proposal/v1")
+
     def test_request_is_strict_and_free_text_remains_uninterpreted(self):
         request = ProjectRequest.from_dict(request_value())
         dsl = render_project_dodsl(request)

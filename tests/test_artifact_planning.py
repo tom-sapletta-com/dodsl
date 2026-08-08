@@ -4,9 +4,9 @@ import json
 
 import pytest
 
-from dodsl.errors import DoDslValidationError
-from dodsl.io import atomic_write_json
-from dodsl.model import ProjectRequest
+from dodsl_contracts.errors import DoDslValidationError
+from dodsl_contracts.model import ProjectRequest
+from dodsl_core.io import atomic_write_json
 from dodsl.service import DoDslService
 
 

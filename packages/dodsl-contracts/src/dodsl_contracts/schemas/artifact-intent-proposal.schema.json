@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dodsl.dev/schemas/dodsl-artifact-intent-proposal.v1.json",
+  "title": "doDSL Artifact Intent Proposal v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "projectId", "baseKnowledgeHash", "outputs", "requirements", "producer"],
+  "properties": {
+    "schema": {"const": "dodsl.artifact-intent-proposal/v1"},
+    "projectId": {"type": "string", "pattern": "^[a-z][a-z0-9-]{1,62}$"},
+    "baseKnowledgeHash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "outputs": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"enum": ["documentation", "ssot", "schematic", "pcb", "pcb-3d", "enclosure", "stl", "3mf", "glb", "openusd", "digital-twin", "software"]}
+    },
+    "producer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "name"],
+      "properties": {
+        "kind": {"enum": ["human", "llm"]},
+        "name": {"type": "string", "minLength": 1, "maxLength": 200},
+        "model": {"type": "string", "minLength": 1},
+        "responseHash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+      },
+      "allOf": [{
+        "if": {"properties": {"kind": {"const": "llm"}}},
+        "then": {"required": ["model", "responseHash"]},
+        "else": {"not": {"anyOf": [{"required": ["model"]}, {"required": ["responseHash"]}]}}
+      }]
+    },
+    "requirements": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "kind", "subject", "claim", "requiredEvidence"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[a-z][a-z0-9-]{1,62}$"},
+          "kind": {"enum": ["component", "electrical", "geometry", "software", "manufacturing", "documentation"]},
+          "subject": {"type": "string", "pattern": "^[a-z][a-z0-9-]{1,62}$"},
+          "claim": {"type": "string", "minLength": 1, "maxLength": 2000},
+          "quantity": {"type": "integer", "minimum": 1, "maximum": 10000},
+          "requiredEvidence": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"enum": ["manufacturer", "mpn", "lifecycle", "datasheet", "supply-range", "package", "pinout", "footprint", "dimensions", "symbol", "3d-model", "behavior", "source-code", "license", "manufacturing-profile"]}
+          },
+          "constraints": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["parameter", "operator", "value", "unit"],
+              "properties": {
+                "parameter": {"type": "string", "pattern": "^[a-z][a-z0-9-]{1,62}$"},
+                "operator": {"enum": ["eq", "ne", "lt", "lte", "gt", "gte", "in", "max", "min"]},
+                "value": {
+                  "oneOf": [
+                    {"type": ["string", "number", "integer", "boolean"]},
+                    {"type": "array", "minItems": 1, "maxItems": 50, "items": {"type": ["string", "number", "integer", "boolean"]}}
+                  ]
+                },
+                "unit": {"type": "string", "minLength": 1, "maxLength": 32}
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

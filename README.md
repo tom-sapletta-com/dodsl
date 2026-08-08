@@ -27,30 +27,62 @@ explicit request
 Raw HTML is the primary source. Markdown is a derived projection, not a
 replacement for HTML.
 
+## Package workspace
+
+```text
+packages/dodsl-contracts  pure schemas, validation, hashes and DSL renderers
+packages/dodsl-core       workspace runtime, atomic IO and dependency ports
+packages/dodsl-planning   governed ArtifactIntent and research planning
+packages/dodsl-adapters   Git, web, f2md, todo2code and onlyDSL adapters
+apps/dodsl-service        CLI, HTTP API and composition root
+```
+
+The dependency direction is enforced by an architecture test:
+
+```text
+contracts <- core
+contracts + core <- planning
+contracts + core <- adapters
+contracts + core + planning + adapters <- service
+```
+
+Every member has its own `pyproject.toml` and can produce an independent wheel
+and sdist. The root [uv workspace](https://docs.astral.sh/uv/concepts/projects/workspaces/)
+provides one reproducible `uv.lock`. Compatibility exports keep existing
+`dodsl.*` imports working during the transition.
+
 ## Quick start
 
 ```bash
-python3 -m venv .venv
-.venv/bin/pip install -e /home/tom/github/bioxfoundry/twin-dsl/py/f2md
-.venv/bin/pip install 'markitdown>=0.1,<1'
-.venv/bin/pip install -e .
+uv sync
 
 export ONLYDSL_SSOT_COMMAND="/home/tom/github/tom-sapletta-com/onlyDSL/.venv/bin/python /home/tom/github/tom-sapletta-com/onlyDSL/server.py ssot"
 export TODO2CODE_COMMAND="node /home/tom/github/semcod/todo2code/dist/src/cli.js"
 
-dodsl --projects-root ./projects run examples/esp32-environment-controller/request.json
+uv run dodsl --projects-root ./projects run examples/esp32-environment-controller/request.json
 ```
 
 Run individual stages:
 
 ```bash
-dodsl --projects-root ./projects init request.json
-dodsl --projects-root ./projects ingest my-project
-dodsl --projects-root ./projects import-file my-project enclosure-front.jpg
-dodsl --projects-root ./projects compile my-project --require-todo2code
-dodsl --projects-root ./projects reconcile my-project
-dodsl --projects-root ./projects status my-project
-dodsl --projects-root ./projects plan-artifact my-project artifact-intent.json
+uv run dodsl --projects-root ./projects init request.json
+uv run dodsl --projects-root ./projects ingest my-project
+uv run dodsl --projects-root ./projects import-file my-project enclosure-front.jpg
+uv run dodsl --projects-root ./projects compile my-project --require-todo2code
+uv run dodsl --projects-root ./projects reconcile my-project
+uv run dodsl --projects-root ./projects status my-project
+uv run dodsl --projects-root ./projects plan-artifact my-project artifact-intent.json
+```
+
+Workspace verification:
+
+```bash
+uv run pytest -q
+uv build --package dodsl-contracts
+uv build --package dodsl-core
+uv build --package dodsl-planning
+uv build --package dodsl-adapters
+uv build --package dodsl
 ```
 
 `reconcile` only creates and validates a candidate. Promotion remains an

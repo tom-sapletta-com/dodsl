@@ -2,14 +2,14 @@
   "schema": "dodsl-process-registry/v1",
   "owner": "system",
   "operations": [
-    {"operation": "source.git.clone", "uri": "dodsl://project/source/git/clone", "status": "implemented", "executor": "dodsl.sources.git:GitSnapshotter"},
-    {"operation": "source.web.snapshot", "uri": "dodsl://project/source/web/snapshot", "status": "implemented", "executor": "dodsl.sources.web:WebSnapshotter"},
-    {"operation": "source.file.import", "uri": "dodsl://project/source/file/import", "status": "implemented", "executor": "dodsl.sources.upload:UploadImporter"},
+    {"operation": "source.git.clone", "uri": "dodsl://project/source/git/clone", "status": "implemented", "executor": "dodsl_adapters.sources.git:GitSnapshotter"},
+    {"operation": "source.web.snapshot", "uri": "dodsl://project/source/web/snapshot", "status": "implemented", "executor": "dodsl_adapters.sources.web:WebSnapshotter"},
+    {"operation": "source.file.import", "uri": "dodsl://project/source/file/import", "status": "implemented", "executor": "dodsl_adapters.sources.upload:UploadImporter"},
     {"operation": "knowledge.markdown.convert", "uri": "dodsl://project/knowledge/markdown/convert", "status": "implemented", "executor": "f2md.convert_tree"},
-    {"operation": "knowledge.dsl.compile", "uri": "dodsl://project/knowledge/dsl/compile", "status": "implemented", "executor": "dodsl.knowledge.compiler:KnowledgeCompiler"},
+    {"operation": "knowledge.dsl.compile", "uri": "dodsl://project/knowledge/dsl/compile", "status": "implemented", "executor": "dodsl_adapters.knowledge.compiler:KnowledgeCompiler"},
     {"operation": "ssot.candidate.reconcile", "uri": "dodsl://project/ssot/revision/reconcile", "status": "implemented", "executor": "onlydsl ssot reconcile"},
     {"operation": "ssot.candidate.promote", "uri": "dodsl://project/ssot/candidate/promote", "status": "external-authority-required", "executor": "onlydsl ssot promote"},
-    {"operation": "artifact.intent.stage", "uri": "dodsl://project/artifact/intent/stage", "status": "implemented", "executor": "dodsl.planning.planner:ArtifactPlanningService"},
+    {"operation": "artifact.intent.stage", "uri": "dodsl://project/artifact/intent/stage", "status": "implemented", "executor": "dodsl_planning.planner:ArtifactPlanningService"},
     {"operation": "research.component.run", "uri": "dodsl://project/research/component/run", "status": "planned-p3"},
     {"operation": "artifact.pcb.build", "uri": "dodsl://project/artifact/pcb/build", "status": "planned-p4-p5"},
     {"operation": "artifact.cad.build", "uri": "dodsl://project/artifact/cad/build", "status": "planned-p6"},
@@ -20,6 +20,6 @@
     "modelCommands": "forbidden",
     "modelProcessUris": "forbidden",
     "modelAuthorityMutation": "forbidden",
-    "forgeSsotPromotion": "forbidden"
+    "dodslSsotPromotion": "forbidden"
   }
 }

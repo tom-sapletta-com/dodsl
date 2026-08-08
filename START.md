@@ -1,6 +1,6 @@
 # doDSL — aktualnie uruchomiona usługa
 
-> Plik tymczasowy. Stan sprawdzony: `2026-08-08T21:17:49+02:00`.
+> Plik tymczasowy. Stan sprawdzony: `2026-08-08T21:41:32+02:00`.
 
 ## Usługa
 
@@ -68,11 +68,14 @@ knowledge semantic hash:
   sha256:b1465c0e368707d1120581758c7ab2380663cfedc4639a8a646a2682f21e7177
 todo2code: compiled
 SSOT candidate: created and validated
-candidate id: dodsl-b1465c0e368707d1-cc0f8cc4
+candidate id: dodsl-b1465c0e368707d1-e230cbd8
 SSOT promotion: not_performed
 ArtifactIntent candidate: artifact-bf182f2461e4c2dc2dda
 research gaps: 8
 research execution: not_performed
+workspace packages: 5 independently buildable distributions
+doDSL tests: 23 passed
+onlyDSL regression tests: 97 passed
 ```
 
 Status projektu:

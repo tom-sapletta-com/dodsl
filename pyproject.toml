@@ -1,24 +1,26 @@
-[build-system]
-requires = ["setuptools>=77"]
-build-backend = "setuptools.build_meta"
-
 [project]
-name = "dodsl"
-dynamic = ["version"]
-description = "Governed source-to-SSOT-to-artifact orchestration service"
-readme = "README.md"
+name = "dodsl-workspace"
+version = "0.1.0"
+description = "Monorepo workspace for doDSL packages and services"
 requires-python = ">=3.11"
-license = "Apache-2.0"
-dependencies = []
+dependencies = ["dodsl==0.1.0"]
 
-[project.scripts]
-dodsl = "dodsl.cli:main"
+[tool.uv]
+package = false
 
-[tool.setuptools.dynamic]
-version = {file = ["VERSION"]}
+[tool.uv.workspace]
+members = ["packages/*", "apps/*"]
 
-[tool.setuptools.packages.find]
-where = ["src"]
+[tool.uv.sources]
+dodsl = {workspace = true}
+dodsl-adapters = {workspace = true}
+dodsl-contracts = {workspace = true}
+dodsl-core = {workspace = true}
+dodsl-planning = {workspace = true}
+f2md = {git = "https://github.com/bioxfoundry/twin-dsl.git", rev = "b4bf25d5e1903b0a215d37285becc98ee9b48d50", subdirectory = "py/f2md"}
+
+[dependency-groups]
+dev = ["pytest>=9.0,<10"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
