@@ -205,7 +205,7 @@ dependencies = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "onlydsl-contracts", git = "https://github.com/tom-sapletta-com/onlyDSL.git?subdirectory=packages%2Fonlydsl-contracts&rev=424f70e" }]
+requires-dist = [{ name = "onlydsl-contracts", git = "https://github.com/tom-sapletta-com/onlyDSL.git?subdirectory=packages%2Fonlydsl-contracts&rev=9d89195" }]
 
 [[package]]
 name = "dodsl-core"
@@ -496,7 +496,7 @@ wheels = [
 [[package]]
 name = "onlydsl-contracts"
 version = "0.0.8"
-source = { git = "https://github.com/tom-sapletta-com/onlyDSL.git?subdirectory=packages%2Fonlydsl-contracts&rev=424f70e#424f70e1ba17f325e86f1fa31ac36ac7a231f3c2" }
+source = { git = "https://github.com/tom-sapletta-com/onlyDSL.git?subdirectory=packages%2Fonlydsl-contracts&rev=9d89195#9d891953876cc14a5a40498e745ae0f0a829e2d4" }
 
 [[package]]
 name = "onnxruntime"

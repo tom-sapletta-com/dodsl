@@ -2,7 +2,7 @@ FROM node:20-bookworm-slim
 
 ARG TODO2CODE_COMMIT=5f8e8314dafb3ba61bd5501136eba87c21292631
 ARG F2MD_COMMIT=b4bf25d5e1903b0a215d37285becc98ee9b48d50
-ARG ONLYDSL_CONTRACTS_COMMIT=424f70e
+ARG ONLYDSL_PACKAGES_COMMIT=9d89195
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends ca-certificates git python3 python3-pip python3-venv \
@@ -16,7 +16,9 @@ RUN git clone --filter=blob:none https://github.com/semcod/todo2code.git /opt/to
 
 RUN python3 -m venv /opt/dodsl-venv \
     && /opt/dodsl-venv/bin/pip install --no-cache-dir \
-      "onlydsl-contracts @ git+https://github.com/tom-sapletta-com/onlyDSL.git@${ONLYDSL_CONTRACTS_COMMIT}#subdirectory=packages/onlydsl-contracts" \
+      "onlydsl-contracts @ git+https://github.com/tom-sapletta-com/onlyDSL.git@${ONLYDSL_PACKAGES_COMMIT}#subdirectory=packages/onlydsl-contracts" \
+      "onlydsl-core @ git+https://github.com/tom-sapletta-com/onlyDSL.git@${ONLYDSL_PACKAGES_COMMIT}#subdirectory=packages/onlydsl-core" \
+      "onlydsl-ssot @ git+https://github.com/tom-sapletta-com/onlyDSL.git@${ONLYDSL_PACKAGES_COMMIT}#subdirectory=packages/onlydsl-ssot" \
       "f2md @ git+https://github.com/bioxfoundry/twin-dsl.git@${F2MD_COMMIT}#subdirectory=py/f2md" \
       "markitdown>=0.1,<1" "protobuf>=6.30,<7" "PyYAML>=6,<7"
 

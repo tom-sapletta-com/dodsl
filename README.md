@@ -38,8 +38,10 @@ apps/dodsl-service        CLI, HTTP API and composition root
 ```
 
 `dodsl-contracts` reuses canonical hashing from the independently built
-`onlydsl-contracts` package pinned to an exact onlyDSL source revision. It does
-not copy kernel contracts or make onlyDSL depend on doDSL.
+`onlydsl-contracts` package pinned to an exact onlyDSL source revision. The
+Docker composition also installs `onlydsl-core` and `onlydsl-ssot` from that
+same revision because the read-only onlyDSL CLI bridge uses their compatibility
+facades. doDSL does not copy kernel contracts or make onlyDSL depend on doDSL.
 
 The dependency direction is enforced by an architecture test:
 
