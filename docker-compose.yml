@@ -1,0 +1,20 @@
+services:
+  dodsl:
+    network_mode: bridge
+    user: "${DODSL_UID:-1000}:${DODSL_GID:-1000}"
+    build:
+      context: .
+    environment:
+      DODSL_PROJECTS_ROOT: /data/projects
+      DODSL_HOST: 0.0.0.0
+      DODSL_PORT: 8788
+      DODSL_API_TOKEN: ${DODSL_API_TOKEN:-}
+      HOME: /tmp
+      ONLYDSL_SSOT_COMMAND: python3 /opt/onlydsl/server.py ssot
+      TODO2CODE_COMMAND: node /opt/todo2code/dist/src/cli.js
+    volumes:
+      - ${DODSL_PROJECTS_ROOT:-./projects}:/data/projects
+      - ${ONLYDSL_REPO:-../onlyDSL}:/opt/onlydsl:ro
+    ports:
+      - "127.0.0.1:${DODSL_PORT:-18788}:8788"
+    restart: unless-stopped

@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://onlydsl.dev/schemas/dodsl-request.v1.json",
+  "title": "doDSL request v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "projectId", "title"],
+  "properties": {
+    "schema": {"const": "dodsl-request/v1"},
+    "projectId": {"type": "string", "pattern": "^[a-z][a-z0-9-]{1,62}$"},
+    "title": {"type": "string", "minLength": 1, "maxLength": 200},
+    "requestText": {"type": "string", "minLength": 1, "maxLength": 100000},
+    "gitSources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["url"],
+        "properties": {
+          "url": {"type": "string", "format": "uri", "maxLength": 2048},
+          "ref": {"type": ["string", "null"], "maxLength": 200},
+          "trustRole": {"enum": ["manager", "customer", "manufacturer", "measured", "cad", "documentation", "project", "internet"]}
+        }
+      }
+    },
+    "webSources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["url"],
+        "properties": {
+          "url": {"type": "string", "format": "uri", "maxLength": 2048},
+          "method": {"enum": ["http", "playwright"]},
+          "trustRole": {"enum": ["manager", "customer", "manufacturer", "measured", "cad", "documentation", "project", "internet"]}
+        }
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"enum": ["documentation", "ssot", "schematic", "pcb", "pcb-3d", "enclosure", "stl", "3mf", "glb", "openusd", "digital-twin", "software"]}
+    }
+  }
+}

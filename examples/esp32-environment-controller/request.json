@@ -1,0 +1,20 @@
+{
+  "schema": "dodsl-request/v1",
+  "projectId": "esp32-environment-controller",
+  "title": "ESP32 environmental controller",
+  "gitSources": [
+    {
+      "url": "https://github.com/espressif/esp-idf.git",
+      "trustRole": "project"
+    }
+  ],
+  "webSources": [
+    {
+      "url": "https://www.espressif.com/en/products/socs/esp32-s3",
+      "trustRole": "manufacturer",
+      "method": "http"
+    }
+  ],
+  "artifacts": ["ssot", "documentation", "schematic", "pcb", "pcb-3d", "enclosure", "stl", "glb", "openusd", "digital-twin"],
+  "requestText": "Sterownik ESP32-S3 z USB-C, czujnikiem temperatury i wilgotności oraz dwoma wyjściami pomp 12 V. Maksymalny rozmiar PCB 90 x 60 mm. Potrzebna jest obudowa FDM."
+}
