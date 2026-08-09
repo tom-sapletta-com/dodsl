@@ -282,8 +282,8 @@ advanced:
     max_file_size_mb: 10
     block_large_files: true
     detect_api_tokens: true
-    auto_manage_gitignore: true
-    auto_add_dot_folders: true
+    auto_manage_gitignore: false
+    auto_add_dot_folders: false
     auto_handle_large_files: true
     known_dot_folders:
     - .idea
