@@ -4,12 +4,12 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dodsl-contracts"
-version = "0.2.0"
+version = "0.2.1"
 description = "Pure contracts and DSL models for doDSL"
 readme = "README.md"
 requires-python = ">=3.11"
 license = "Apache-2.0"
-dependencies = ["onlydsl-contracts==0.0.9"]
+dependencies = ["onlydsl-contracts>=0.0.12,<0.1"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

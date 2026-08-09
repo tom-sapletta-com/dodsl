@@ -1,8 +1,8 @@
 FROM node:20-bookworm-slim
 
-ARG TODO2CODE_COMMIT=5f8e8314dafb3ba61bd5501136eba87c21292631
-ARG F2MD_COMMIT=b4bf25d5e1903b0a215d37285becc98ee9b48d50
-ARG ONLYDSL_PACKAGES_COMMIT=5983bae
+ARG TODO2CODE_COMMIT=2380dd8b2f7d4bdc594613701eb770d7e251d0b3
+ARG F2MD_COMMIT=c010b499feacb80fcb814be78b07d6a14444ee6f
+ARG ONLYDSL_PACKAGES_COMMIT=f694d1eaa2683c6f7e72064ddb145db9802cc847
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends ca-certificates git python3 python3-pip python3-venv \

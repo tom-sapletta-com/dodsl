@@ -1,9 +1,14 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "dodsl-workspace"
-version = "0.2.0"
+version = "0.2.1"
 description = "Monorepo workspace for doDSL packages and services"
 requires-python = ">=3.11"
-dependencies = ["dodsl==0.2.0"]
+dependencies = ["dodsl>=0.2,<0.3"]
+license = "Apache-2.0"
 
 [tool.uv]
 package = false
@@ -17,11 +22,40 @@ dodsl-adapters = {workspace = true}
 dodsl-contracts = {workspace = true}
 dodsl-core = {workspace = true}
 dodsl-planning = {workspace = true}
-onlydsl-contracts = {git = "https://github.com/tom-sapletta-com/onlyDSL.git", rev = "5983bae", subdirectory = "packages/onlydsl-contracts"}
-f2md = {git = "https://github.com/bioxfoundry/twin-dsl.git", rev = "b4bf25d5e1903b0a215d37285becc98ee9b48d50", subdirectory = "py/f2md"}
+onlydsl-contracts = {git = "https://github.com/tom-sapletta-com/onlyDSL.git", rev = "f694d1eaa2683c6f7e72064ddb145db9802cc847", subdirectory = "packages/onlydsl-contracts"}
+f2md = {git = "https://github.com/bioxfoundry/twin-dsl.git", rev = "c010b499feacb80fcb814be78b07d6a14444ee6f", subdirectory = "py/f2md"}
 
 [dependency-groups]
 dev = ["pytest>=9.0,<10"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[tool.costs]
+# AI Cost tracking configuration
+badge = true
+update_readme = true
+readme_path = "README.md"
+default_model = "openrouter/qwen/qwen3-coder-next"
+analysis_mode = "byok"
+full_history = true
+max_commits = 500
+
+# Cost thresholds for badge colors (USD)
+badge_color_thresholds = { low = 1.0, medium = 5.0, high = 10.0, critical = 50.0 }
+
+[tool.pfix]
+# Self-healing Python configuration
+model = "openrouter/qwen/qwen3-coder-next"
+auto_apply = true
+auto_install_deps = true
+auto_restart = false
+max_retries = 3
+create_backups = false
+git_auto_commit = false
+
+[tool.pfix.runtime_todo]
+enabled = true
+todo_file = "TODO.md"
+min_severity = "low"
+deduplicate = true

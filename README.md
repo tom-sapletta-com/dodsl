@@ -1,5 +1,20 @@
 # doDSL
 
+
+## AI Cost Tracking
+
+![PyPI](https://img.shields.io/badge/pypi-costs-blue) ![Version](https://img.shields.io/badge/version-0.2.1-blue) ![Python](https://img.shields.io/badge/python-3.9+-blue) ![License](https://img.shields.io/badge/license-Apache--2.0-green)
+![AI Cost](https://img.shields.io/badge/AI%20Cost-$0.06-orange) ![Human Time](https://img.shields.io/badge/Human%20Time-3.6h-blue) ![Model](https://img.shields.io/badge/Model-openrouter%2Fqwen%2Fqwen3--coder--next-lightgrey)
+
+- 🤖 **LLM usage:** $0.0632 (3 commits)
+- 👤 **Human dev:** ~$364 (3.6h @ $100/h, 30min dedup)
+
+Generated on 2026-08-10 using [openrouter/qwen/qwen3-coder-next](https://openrouter.ai/qwen/qwen3-coder-next)
+
+---
+
+
+
 `doDSL` is a governed `sources -> knowledge -> candidate SSOT -> artifacts`
 service. It accepts explicit GitHub repositories, web pages and uploaded files,
 preserves their original bytes, compiles normalized Markdown and typed knowledge,
@@ -154,3 +169,8 @@ Set `DODSL_API_TOKEN` outside local development to require a Bearer token.
 
 See [Implementation plan](docs/IMPLEMENTATION_PLAN.md) for the complete P3-P10
 electronics, PCB, CAD, photo reconstruction and Digital Twin roadmap.
+
+
+## License
+
+Licensed under Apache-2.0.

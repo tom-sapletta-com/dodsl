@@ -160,7 +160,7 @@ wheels = [
 
 [[package]]
 name = "dodsl"
-version = "0.2.0"
+version = "0.2.1"
 source = { editable = "apps/dodsl-service" }
 dependencies = [
     { name = "dodsl-adapters" },
@@ -179,7 +179,7 @@ requires-dist = [
 
 [[package]]
 name = "dodsl-adapters"
-version = "0.2.0"
+version = "0.2.1"
 source = { editable = "packages/dodsl-adapters" }
 dependencies = [
     { name = "dodsl-contracts" },
@@ -192,24 +192,24 @@ dependencies = [
 requires-dist = [
     { name = "dodsl-contracts", editable = "packages/dodsl-contracts" },
     { name = "dodsl-core", editable = "packages/dodsl-core" },
-    { name = "f2md", git = "https://github.com/bioxfoundry/twin-dsl.git?subdirectory=py%2Ff2md&rev=b4bf25d5e1903b0a215d37285becc98ee9b48d50" },
+    { name = "f2md", git = "https://github.com/bioxfoundry/twin-dsl.git?subdirectory=py%2Ff2md&rev=c010b499feacb80fcb814be78b07d6a14444ee6f" },
     { name = "markitdown", specifier = ">=0.1,<1" },
 ]
 
 [[package]]
 name = "dodsl-contracts"
-version = "0.2.0"
+version = "0.2.1"
 source = { editable = "packages/dodsl-contracts" }
 dependencies = [
     { name = "onlydsl-contracts" },
 ]
 
 [package.metadata]
-requires-dist = [{ name = "onlydsl-contracts", git = "https://github.com/tom-sapletta-com/onlyDSL.git?subdirectory=packages%2Fonlydsl-contracts&rev=5983bae" }]
+requires-dist = [{ name = "onlydsl-contracts", git = "https://github.com/tom-sapletta-com/onlyDSL.git?subdirectory=packages%2Fonlydsl-contracts&rev=f694d1eaa2683c6f7e72064ddb145db9802cc847" }]
 
 [[package]]
 name = "dodsl-core"
-version = "0.2.0"
+version = "0.2.1"
 source = { editable = "packages/dodsl-core" }
 dependencies = [
     { name = "dodsl-contracts" },
@@ -220,7 +220,7 @@ requires-dist = [{ name = "dodsl-contracts", editable = "packages/dodsl-contract
 
 [[package]]
 name = "dodsl-planning"
-version = "0.2.0"
+version = "0.2.1"
 source = { editable = "packages/dodsl-planning" }
 dependencies = [
     { name = "dodsl-contracts" },
@@ -235,7 +235,7 @@ requires-dist = [
 
 [[package]]
 name = "dodsl-workspace"
-version = "0.2.0"
+version = "0.2.1"
 source = { virtual = "." }
 dependencies = [
     { name = "dodsl" },
@@ -254,8 +254,8 @@ dev = [{ name = "pytest", specifier = ">=9.0,<10" }]
 
 [[package]]
 name = "f2md"
-version = "0.3.0"
-source = { git = "https://github.com/bioxfoundry/twin-dsl.git?subdirectory=py%2Ff2md&rev=b4bf25d5e1903b0a215d37285becc98ee9b48d50#b4bf25d5e1903b0a215d37285becc98ee9b48d50" }
+version = "0.5.31"
+source = { git = "https://github.com/bioxfoundry/twin-dsl.git?subdirectory=py%2Ff2md&rev=c010b499feacb80fcb814be78b07d6a14444ee6f#c010b499feacb80fcb814be78b07d6a14444ee6f" }
 
 [[package]]
 name = "flatbuffers"
@@ -495,8 +495,8 @@ wheels = [
 
 [[package]]
 name = "onlydsl-contracts"
-version = "0.0.9"
-source = { git = "https://github.com/tom-sapletta-com/onlyDSL.git?subdirectory=packages%2Fonlydsl-contracts&rev=5983bae#5983baeb28c4866b3b51d59606e0624bac4bea04" }
+version = "0.0.12"
+source = { git = "https://github.com/tom-sapletta-com/onlyDSL.git?subdirectory=packages%2Fonlydsl-contracts&rev=f694d1eaa2683c6f7e72064ddb145db9802cc847#f694d1eaa2683c6f7e72064ddb145db9802cc847" }
 
 [[package]]
 name = "onnxruntime"

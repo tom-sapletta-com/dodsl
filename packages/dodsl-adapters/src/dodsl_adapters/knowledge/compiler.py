@@ -103,11 +103,10 @@ class KnowledgeCompiler:
         except ImportError as exc:
             raise DoDslDependencyError("F2MD_UNAVAILABLE") from exc
         try:
-            from f2md.intent_compile import compile_tree
+            from f2md.intent_compile import compile_tree, refresh_output_identity
             intent_compiler = "f2md.intent-compiler/v1"
-        except ImportError:
-            from .intent_compile import COMPILER_ID as intent_compiler
-            from .intent_compile import compile_tree
+        except ImportError as exc:
+            raise DoDslDependencyError("F2MD_INTENT_COMPILER_UNAVAILABLE") from exc
         source = workspace.root / "source"
         if not any(_walk_primary(source)):
             raise DoDslValidationError("SOURCE_TREE_EMPTY")
@@ -159,6 +158,7 @@ class KnowledgeCompiler:
             if summary["failures"]:
                 raise DoDslValidationError("F2MD_INTENT_COMPILE_FAILED")
             _canonicalize_intents(f2md_intents, md_stage, workspace.project_id, content_hashes)
+            refresh_output_identity(f2md_intents)
 
             todo_results: dict[str, Any] = {}
             for repository in sorted((source / "git").glob("*/repository")):

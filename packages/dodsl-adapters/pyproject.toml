@@ -4,15 +4,15 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dodsl-adapters"
-version = "0.2.0"
+version = "0.2.1"
 description = "System-owned adapters for doDSL"
 readme = "README.md"
 requires-python = ">=3.11"
 license = "Apache-2.0"
 dependencies = [
-  "dodsl-contracts==0.2.0",
-  "dodsl-core==0.2.0",
-  "f2md==0.3.0",
+  "dodsl-contracts>=0.2,<0.3",
+  "dodsl-core>=0.2,<0.3",
+  "f2md>=0.5.31,<0.6",
   "markitdown>=0.1,<1",
 ]
 
