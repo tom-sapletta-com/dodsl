@@ -129,6 +129,7 @@ def test_external_capabilities_have_one_owner_and_pinned_adapters():
         for path in (*sorted((ROOT / "packages").glob("*/pyproject.toml")), *sorted((ROOT / "apps").glob("*/pyproject.toml")))
     ]
     assert not any(dependency.lower().startswith("todo2code") for dependencies in manifests for dependency in dependencies)
+    assert "/home/" not in (ROOT / "tests/test_e2e.py").read_text(encoding="utf-8")
 
 
 def test_process_registry_points_to_extracted_implementations_and_new_invariant_name():

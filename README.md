@@ -1,20 +1,5 @@
 # doDSL
 
-
-## AI Cost Tracking
-
-![PyPI](https://img.shields.io/badge/pypi-costs-blue) ![Version](https://img.shields.io/badge/version-0.2.1-blue) ![Python](https://img.shields.io/badge/python-3.9+-blue) ![License](https://img.shields.io/badge/license-Apache--2.0-green)
-![AI Cost](https://img.shields.io/badge/AI%20Cost-$0.06-orange) ![Human Time](https://img.shields.io/badge/Human%20Time-3.6h-blue) ![Model](https://img.shields.io/badge/Model-openrouter%2Fqwen%2Fqwen3--coder--next-lightgrey)
-
-- 🤖 **LLM usage:** $0.0632 (3 commits)
-- 👤 **Human dev:** ~$364 (3.6h @ $100/h, 30min dedup)
-
-Generated on 2026-08-10 using [openrouter/qwen/qwen3-coder-next](https://openrouter.ai/qwen/qwen3-coder-next)
-
----
-
-
-
 `doDSL` is a governed `sources -> knowledge -> candidate SSOT -> artifacts`
 service. It accepts explicit GitHub repositories, web pages and uploaded files,
 preserves their original bytes, compiles normalized Markdown and typed knowledge,
@@ -72,6 +57,12 @@ Every member has its own `pyproject.toml` and can produce an independent wheel
 and sdist. The root [uv workspace](https://docs.astral.sh/uv/concepts/projects/workspaces/)
 provides one reproducible `uv.lock`. Compatibility exports keep existing
 `dodsl.*` imports working during the transition.
+
+Capability ownership is explicit: f2md is the only Markdown-to-`t2c.intent/v1`
+compiler, while todo2code remains a separately built process that turns
+repository reality into a graph, diagnostics and non-executed change proposals.
+doDSL only normalizes their file contracts and orchestrates them; it has no
+local compiler fallback and no Python dependency on todo2code.
 
 ## Quick start
 
@@ -154,9 +145,9 @@ Set `DODSL_API_TOKEN` outside local development to require a Bearer token.
   and duration remain in `.dodsl/runtime` and cannot perturb the semantic hash.
 - todo2code code-change plans remain proposals with `execution=not_performed`;
   neither todo2code nor doDSL grants AQL authority or applies their patches.
-- When a pinned f2md release lacks `intent_compile`, doDSL uses its versioned,
-  deterministic Markdown evidence compiler. It only creates source-anchored
-  claims; it does not interpret free-form requests.
+- f2md is the sole Markdown evidence compiler. A missing or incompatible
+  `intent_compile` contract fails with `F2MD_INTENT_COMPILER_UNAVAILABLE`; doDSL
+  does not silently switch to a copied implementation.
 - Free-form user text is preserved but remains `waiting_interpretation`; doDSL
   does not replace a missing LLM interpretation with keyword heuristics.
 - Human or LLM artifact proposals must use the strict

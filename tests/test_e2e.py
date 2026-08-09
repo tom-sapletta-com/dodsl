@@ -17,20 +17,16 @@ from dodsl.service import DoDslService
 from dodsl import __version__ as service_version
 
 
-ROOT = Path(__file__).resolve().parents[1]
-ONLYDSL = ROOT.parent / "onlyDSL"
-
-
 def _git(command: list[str], cwd: Path) -> str:
     return subprocess.run(["git", *command], cwd=cwd, check=True, text=True, stdout=subprocess.PIPE).stdout.strip()
 
 
 class EndToEndTests(unittest.TestCase):
     def test_git_to_markdown_to_dsl_to_ssot_candidate(self):
-        onlydsl_python = ONLYDSL / ".venv/bin/python"
-        onlydsl_server = ONLYDSL / "server.py"
-        if not onlydsl_python.is_file() or not onlydsl_server.is_file():
-            self.skipTest("local onlyDSL checkout unavailable")
+        configured_onlydsl = os.getenv("DODSL_TEST_ONLYDSL_SSOT_COMMAND", "")
+        if not configured_onlydsl:
+            self.skipTest("set DODSL_TEST_ONLYDSL_SSOT_COMMAND for the external onlyDSL contract")
+        onlydsl_command = tuple(shlex.split(configured_onlydsl))
         with tempfile.TemporaryDirectory() as repo_td, tempfile.TemporaryDirectory() as projects_td:
             repository = Path(repo_td)
             _git(["init", "-q"], repository)
@@ -54,7 +50,7 @@ class EndToEndTests(unittest.TestCase):
             dodsl = DoDslService(
                 projects_td, git=GitSnapshotter(allow_local=True), web=WebSnapshotter(allow_private=True),
                 compiler=KnowledgeCompiler(todo_adapter),
-                ssot=SsotBridge((str(onlydsl_python), str(onlydsl_server), "ssot")),
+                ssot=SsotBridge(onlydsl_command),
             )
             dodsl.create(request)
             dodsl.ingest(request.project_id)

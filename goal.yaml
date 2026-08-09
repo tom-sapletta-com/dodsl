@@ -239,7 +239,7 @@ strategies:
   python:
     test: uv run pytest -q
     build: uv build --all-packages --out-dir dist
-    publish: "twine upload dist/*-{version}* && : dodsl-workspace"
+    publish: "twine upload --skip-existing dist/*-{version}* && : dodsl-workspace"
     publish_enabled: true
     dependencies:
       file: requirements.txt

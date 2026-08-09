@@ -6,15 +6,20 @@ doDSL is an orchestrator. The ownership split is deliberate:
 
 ```text
 onlyDSL        authority, accepted state, integrity, repair, promotion
-f2md           source file -> Markdown envelope
-todo2code      code/docs/git -> intent evidence graph
+f2md           source -> Markdown and Markdown -> t2c.intent/v1 evidence
+todo2code      repository reality -> graph, diagnostics and patch proposals
 twin-dsl       physical evidence, geometry, scene and Digital Twin runtime
-doDSL          workspace, source snapshots, research and artifact recipes
+doDSL          orchestration, source snapshots, adapters and artifact recipes
 ```
 
 doDSL does not become another SSOT implementation, CAD kernel, KiCad parser or
 Digital Twin engine. It binds existing tools through fixed process adapters and
 collects immutable receipts.
+
+These boundaries are enforced as file/process contracts. f2md is an imported
+compiler dependency; todo2code is invoked as a pinned standalone CLI and is not
+reimplemented or imported as a Python library. A missing dependency is reported
+as unavailable or failed, never treated as a successful fallback.
 
 The first implementation milestone is intentionally P0-P2. A source ingestion
 service must be reproducible and governed before it is allowed to manufacture a
