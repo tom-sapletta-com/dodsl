@@ -4,7 +4,6 @@ import json
 import tempfile
 import unittest
 from importlib.resources import files
-from pathlib import Path
 
 from dodsl_contracts.dsl import KnowledgeDocument, render_knowledge_index, render_project_dodsl, render_trust_policy
 from dodsl_contracts.errors import DoDslValidationError

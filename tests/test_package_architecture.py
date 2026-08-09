@@ -108,6 +108,8 @@ def test_external_capabilities_have_one_owner_and_pinned_adapters():
     contracts = tomllib.loads((ROOT / "packages/dodsl-contracts/pyproject.toml").read_text(encoding="utf-8"))
     adapters = tomllib.loads((ROOT / "packages/dodsl-adapters/pyproject.toml").read_text(encoding="utf-8"))
     dockerfile = (ROOT / "Dockerfile").read_text(encoding="utf-8")
+    compose = (ROOT / "docker-compose.yml").read_text(encoding="utf-8")
+    local_compose = (ROOT / "docker-compose.local.yml").read_text(encoding="utf-8")
 
     def docker_commit(name: str) -> str:
         match = re.search(rf"^ARG {name}=([0-9a-f]{{40}})$", dockerfile, re.MULTILINE)
@@ -118,6 +120,14 @@ def test_external_capabilities_have_one_owner_and_pinned_adapters():
     assert sources["onlydsl-contracts"]["rev"] == docker_commit("ONLYDSL_PACKAGES_COMMIT")
     assert sources["f2md"]["rev"] == docker_commit("F2MD_COMMIT")
     assert len(docker_commit("TODO2CODE_COMMIT")) == 40
+    assert "git clone --filter=blob:none https://github.com/tom-sapletta-com/onlyDSL.git /opt/onlydsl" in dockerfile
+    assert "git clone --filter=blob:none https://github.com/bioxfoundry/twin-dsl.git /opt/twin-dsl" in dockerfile
+    assert dockerfile.count("https://github.com/tom-sapletta-com/onlyDSL.git") == 1
+    assert dockerfile.count("https://github.com/bioxfoundry/twin-dsl.git") == 1
+    assert 'ONLYDSL_SSOT_COMMAND="onlydsl ssot"' in dockerfile
+    assert "ONLYDSL_SSOT_COMMAND: onlydsl ssot" in compose
+    assert "/opt/onlydsl" not in compose
+    assert "ONLYDSL_REPO" in local_compose and "/opt/onlydsl:ro" in local_compose
     assert contracts["project"]["dependencies"] == ["onlydsl-contracts>=0.0.12,<0.1"]
     assert "f2md>=0.5.31,<0.6" in adapters["project"]["dependencies"]
     assert not (ROOT / "packages/dodsl-adapters/src/dodsl_adapters/knowledge/intent_compile.py").exists()

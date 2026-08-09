@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dodsl-workspace"
-version = "0.2.2"
+version = "0.2.3"
 description = "Monorepo workspace for doDSL packages and services"
 requires-python = ">=3.11"
 dependencies = ["dodsl>=0.2,<0.3"]

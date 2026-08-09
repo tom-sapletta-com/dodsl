@@ -1,6 +1,8 @@
+.env.example
 .venv/
 __pycache__/
 .pytest_cache/
+.ci-reports/
 .idea/
 *.pyc
 *.egg-info/

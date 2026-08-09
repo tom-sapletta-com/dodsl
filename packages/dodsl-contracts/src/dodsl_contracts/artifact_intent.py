@@ -8,6 +8,7 @@ from typing import Any
 from .errors import DoDslValidationError
 from .hashing import canonical_hash
 from .model import ARTIFACT_TARGETS
+from .validation import strict_keys
 
 ID_RE = re.compile(r"[a-z][a-z0-9-]{1,62}")
 HASH_RE = re.compile(r"sha256:[0-9a-f]{64}")
@@ -21,15 +22,6 @@ EVIDENCE_FIELDS = {
 }
 OPERATORS = {"eq", "ne", "lt", "lte", "gt", "gte", "in", "max", "min"}
 PRODUCER_KINDS = {"human", "llm"}
-
-
-def _strict(value: dict[str, Any], allowed: set[str], required: set[str], context: str) -> None:
-    unknown = set(value) - allowed
-    missing = required - set(value)
-    if unknown or missing:
-        raise DoDslValidationError(
-            f"{context}_KEYS_INVALID:unknown={sorted(unknown)}:missing={sorted(missing)}"
-        )
 
 
 def _identifier(value: Any, context: str) -> str:
@@ -69,7 +61,7 @@ class Producer:
     def from_dict(cls, value: Any) -> "Producer":
         if not isinstance(value, dict):
             raise DoDslValidationError("ARTIFACT_PRODUCER_OBJECT_REQUIRED")
-        _strict(value, {"kind", "name", "model", "responseHash"}, {"kind", "name"}, "ARTIFACT_PRODUCER")
+        strict_keys(value, {"kind", "name", "model", "responseHash"}, {"kind", "name"}, "ARTIFACT_PRODUCER")
         kind = str(value["kind"])
         if kind not in PRODUCER_KINDS:
             raise DoDslValidationError("ARTIFACT_PRODUCER_KIND_INVALID")
@@ -98,7 +90,7 @@ class Constraint:
     def from_dict(cls, value: Any) -> "Constraint":
         if not isinstance(value, dict):
             raise DoDslValidationError("ARTIFACT_CONSTRAINT_OBJECT_REQUIRED")
-        _strict(value, {"parameter", "operator", "value", "unit"}, {"parameter", "operator", "value", "unit"}, "ARTIFACT_CONSTRAINT")
+        strict_keys(value, {"parameter", "operator", "value", "unit"}, {"parameter", "operator", "value", "unit"}, "ARTIFACT_CONSTRAINT")
         parameter = _identifier(value["parameter"], "ARTIFACT_CONSTRAINT_PARAMETER")
         operator = str(value["operator"])
         if operator not in OPERATORS:
@@ -125,7 +117,7 @@ class CapabilityRequirement:
         if not isinstance(value, dict):
             raise DoDslValidationError("ARTIFACT_REQUIREMENT_OBJECT_REQUIRED")
         allowed = {"id", "kind", "subject", "claim", "quantity", "requiredEvidence", "constraints"}
-        _strict(value, allowed, {"id", "kind", "subject", "claim", "requiredEvidence"}, "ARTIFACT_REQUIREMENT")
+        strict_keys(value, allowed, {"id", "kind", "subject", "claim", "requiredEvidence"}, "ARTIFACT_REQUIREMENT")
         kind = str(value["kind"])
         if kind not in REQUIREMENT_KINDS:
             raise DoDslValidationError("ARTIFACT_REQUIREMENT_KIND_INVALID")
@@ -179,7 +171,7 @@ class ArtifactIntentProposal:
         if not isinstance(value, dict):
             raise DoDslValidationError("ARTIFACT_INTENT_OBJECT_REQUIRED")
         allowed = {"schema", "projectId", "baseKnowledgeHash", "outputs", "requirements", "producer"}
-        _strict(value, allowed, allowed, "ARTIFACT_INTENT")
+        strict_keys(value, allowed, allowed, "ARTIFACT_INTENT")
         if value["schema"] != "dodsl.artifact-intent-proposal/v1":
             raise DoDslValidationError("ARTIFACT_INTENT_SCHEMA_INVALID")
         project_id = _identifier(value["projectId"], "ARTIFACT_PROJECT")

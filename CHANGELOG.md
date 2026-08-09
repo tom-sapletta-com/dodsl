@@ -7,6 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.3] - 2026-08-10
+
+### Docs
+- Update README.md
+
+### Test
+- Update tests/test_contracts.py
+- Update tests/test_e2e.py
+- Update tests/test_package_architecture.py
+- Update tests/test_sources.py
+- Update tests/test_status_report.py
+
+### Other
+- Update .env.example
+- Update .gitignore
+- Update Makefile
+- Update docker-compose.local.yml
+- Update packages/dodsl-adapters/src/dodsl_adapters/sources/web.py
+- Update packages/dodsl-adapters/src/dodsl_adapters/ssot.py
+- Update packages/dodsl-contracts/src/dodsl_contracts/artifact_intent.py
+- Update packages/dodsl-contracts/src/dodsl_contracts/development_evidence.py
+- Update packages/dodsl-contracts/src/dodsl_contracts/hashing.py
+- Update packages/dodsl-contracts/src/dodsl_contracts/model.py
+- ... and 4 more files
+
 ## [0.2.2] - 2026-08-10
 
 ### Docs

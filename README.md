@@ -67,13 +67,25 @@ local compiler fallback and no Python dependency on todo2code.
 ## Quick start
 
 ```bash
-uv sync
+make setup
+make check
 
 export ONLYDSL_SSOT_COMMAND="/home/tom/github/tom-sapletta-com/onlyDSL/.venv/bin/python /home/tom/github/tom-sapletta-com/onlyDSL/server.py ssot"
 export TODO2CODE_COMMAND="node /home/tom/github/semcod/todo2code/dist/src/cli.js"
 
 uv run dodsl --projects-root ./projects run examples/esp32-environment-controller/request.json
 ```
+
+The developer entry points are deliberately small: `make up`, `make health`,
+`make logs` and `make down` control the pinned Compose service. To test a live
+onlyDSL source checkout explicitly, use
+`make up-local ONLYDSL_REPO=/path/to/onlyDSL`; the default stack never masks the
+pinned image dependency with host files. `make report` runs the
+local tests, meaningful-duplication gate and all-package build, then writes
+`.ci-reports/status.json` plus a readable `.ci-reports/status.md`. External
+onlyDSL/todo2code tests and Docker are shown as `SKIPPED`, never `PASS`, unless
+they are explicitly requested with `make report-full` and configured through
+the two `DODSL_TEST_*_COMMAND` variables.
 
 Run individual stages:
 
@@ -110,9 +122,10 @@ docker compose up -d --build
 curl http://127.0.0.1:18788/health
 ```
 
-The image pins todo2code, f2md and the independently buildable onlyDSL contract,
-core and SSOT packages to exact source commits. The development Compose stack
-also mounts the local onlyDSL checkout read-only for its CLI composition layer.
+The image clones each pinned upstream exactly once, then installs todo2code,
+f2md and the independently buildable onlyDSL application, contract, core and
+SSOT packages from those local source trees. `docker-compose.local.yml` is the
+explicit, read-only source override used only by `make up-local`.
 
 Compose runs doDSL as `${DODSL_UID:-1000}:${DODSL_GID:-1000}` so generated
 Markdown, DSL and SSOT candidates remain readable by the host user. Set both

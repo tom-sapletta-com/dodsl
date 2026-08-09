@@ -10,7 +10,6 @@ from pathlib import Path
 from typing import Any
 
 from dodsl_contracts.errors import DoDslDependencyError, DoDslValidationError
-from dodsl_core.io import canonical_hash
 from dodsl_core.workspace import ProjectWorkspace
 
 

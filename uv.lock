@@ -160,7 +160,7 @@ wheels = [
 
 [[package]]
 name = "dodsl"
-version = "0.2.2"
+version = "0.2.3"
 source = { editable = "apps/dodsl-service" }
 dependencies = [
     { name = "dodsl-adapters" },
@@ -179,7 +179,7 @@ requires-dist = [
 
 [[package]]
 name = "dodsl-adapters"
-version = "0.2.2"
+version = "0.2.3"
 source = { editable = "packages/dodsl-adapters" }
 dependencies = [
     { name = "dodsl-contracts" },
@@ -198,7 +198,7 @@ requires-dist = [
 
 [[package]]
 name = "dodsl-contracts"
-version = "0.2.2"
+version = "0.2.3"
 source = { editable = "packages/dodsl-contracts" }
 dependencies = [
     { name = "onlydsl-contracts" },
@@ -209,7 +209,7 @@ requires-dist = [{ name = "onlydsl-contracts", git = "https://github.com/tom-sap
 
 [[package]]
 name = "dodsl-core"
-version = "0.2.2"
+version = "0.2.3"
 source = { editable = "packages/dodsl-core" }
 dependencies = [
     { name = "dodsl-contracts" },
@@ -220,7 +220,7 @@ requires-dist = [{ name = "dodsl-contracts", editable = "packages/dodsl-contract
 
 [[package]]
 name = "dodsl-planning"
-version = "0.2.2"
+version = "0.2.3"
 source = { editable = "packages/dodsl-planning" }
 dependencies = [
     { name = "dodsl-contracts" },
@@ -235,7 +235,7 @@ requires-dist = [
 
 [[package]]
 name = "dodsl-workspace"
-version = "0.2.2"
+version = "0.2.3"
 source = { virtual = "." }
 dependencies = [
     { name = "dodsl" },

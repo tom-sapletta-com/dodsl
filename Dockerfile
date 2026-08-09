@@ -14,12 +14,19 @@ RUN git clone --filter=blob:none https://github.com/semcod/todo2code.git /opt/to
     && npm ci --no-audit --no-fund \
     && npm run build
 
+RUN git clone --filter=blob:none https://github.com/tom-sapletta-com/onlyDSL.git /opt/onlydsl \
+    && git -C /opt/onlydsl checkout --detach "$ONLYDSL_PACKAGES_COMMIT"
+
+RUN git clone --filter=blob:none https://github.com/bioxfoundry/twin-dsl.git /opt/twin-dsl \
+    && git -C /opt/twin-dsl checkout --detach "$F2MD_COMMIT"
+
 RUN python3 -m venv /opt/dodsl-venv \
     && /opt/dodsl-venv/bin/pip install --no-cache-dir \
-      "onlydsl-contracts @ git+https://github.com/tom-sapletta-com/onlyDSL.git@${ONLYDSL_PACKAGES_COMMIT}#subdirectory=packages/onlydsl-contracts" \
-      "onlydsl-core @ git+https://github.com/tom-sapletta-com/onlyDSL.git@${ONLYDSL_PACKAGES_COMMIT}#subdirectory=packages/onlydsl-core" \
-      "onlydsl-ssot @ git+https://github.com/tom-sapletta-com/onlyDSL.git@${ONLYDSL_PACKAGES_COMMIT}#subdirectory=packages/onlydsl-ssot" \
-      "f2md @ git+https://github.com/bioxfoundry/twin-dsl.git@${F2MD_COMMIT}#subdirectory=py/f2md" \
+      /opt/onlydsl/packages/onlydsl-contracts \
+      /opt/onlydsl/packages/onlydsl-core \
+      /opt/onlydsl/packages/onlydsl-ssot \
+      /opt/onlydsl \
+      /opt/twin-dsl/py/f2md \
       "markitdown>=0.1,<1" "protobuf>=6.30,<7" "PyYAML>=6,<7"
 
 WORKDIR /app
@@ -36,7 +43,7 @@ ENV PATH="/opt/dodsl-venv/bin:${PATH}" \
     DODSL_HOST=0.0.0.0 \
     DODSL_PORT=8788 \
     TODO2CODE_COMMAND="node /opt/todo2code/dist/src/cli.js" \
-    ONLYDSL_SSOT_COMMAND="python3 /opt/onlydsl/server.py ssot"
+    ONLYDSL_SSOT_COMMAND="onlydsl ssot"
 
 EXPOSE 8788
 HEALTHCHECK --interval=10s --timeout=3s --retries=10 CMD node -e "fetch('http://127.0.0.1:8788/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"

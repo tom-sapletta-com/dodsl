@@ -1,0 +1,6 @@
+services:
+  dodsl:
+    environment:
+      ONLYDSL_SSOT_COMMAND: python3 /opt/onlydsl/server.py ssot
+    volumes:
+      - ${ONLYDSL_REPO:?set ONLYDSL_REPO to an onlyDSL checkout}:/opt/onlydsl:ro

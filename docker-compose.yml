@@ -10,11 +10,10 @@ services:
       DODSL_PORT: 8788
       DODSL_API_TOKEN: ${DODSL_API_TOKEN:-}
       HOME: /tmp
-      ONLYDSL_SSOT_COMMAND: python3 /opt/onlydsl/server.py ssot
+      ONLYDSL_SSOT_COMMAND: onlydsl ssot
       TODO2CODE_COMMAND: node /opt/todo2code/dist/src/cli.js
     volumes:
       - ${DODSL_PROJECTS_ROOT:-./projects}:/data/projects
-      - ${ONLYDSL_REPO:-../onlyDSL}:/opt/onlydsl:ro
     ports:
       - "127.0.0.1:${DODSL_PORT:-18788}:8788"
     restart: unless-stopped

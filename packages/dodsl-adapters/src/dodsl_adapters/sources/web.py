@@ -5,9 +5,8 @@ import os
 import shutil
 import ssl
 import uuid
-from pathlib import Path
 from urllib.error import HTTPError, URLError
-from urllib.parse import urljoin, urlsplit
+from urllib.parse import urljoin
 from urllib.request import HTTPRedirectHandler, HTTPSHandler, Request, build_opener
 
 from dodsl_contracts.errors import DoDslConflict, DoDslDependencyError, DoDslValidationError

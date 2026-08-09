@@ -6,6 +6,7 @@ from typing import Any
 from urllib.parse import urlsplit
 
 from .errors import DoDslValidationError
+from .validation import strict_keys
 
 PROJECT_ID_RE = re.compile(r"[a-z][a-z0-9-]{1,62}")
 TRUST_ROLES = {"manager", "customer", "manufacturer", "measured", "cad", "documentation", "project", "internet"}
@@ -13,13 +14,6 @@ ARTIFACT_TARGETS = {
     "documentation", "ssot", "schematic", "pcb", "pcb-3d", "enclosure",
     "stl", "3mf", "glb", "openusd", "digital-twin", "software",
 }
-
-
-def _strict_keys(value: dict[str, Any], allowed: set[str], required: set[str], context: str) -> None:
-    unknown = set(value) - allowed
-    missing = required - set(value)
-    if unknown or missing:
-        raise DoDslValidationError(f"{context}_KEYS_INVALID:unknown={sorted(unknown)}:missing={sorted(missing)}")
 
 
 def _url(value: Any, context: str) -> str:
@@ -43,7 +37,7 @@ class GitSource:
     def from_dict(cls, value: Any) -> "GitSource":
         if not isinstance(value, dict):
             raise DoDslValidationError("GIT_SOURCE_OBJECT_REQUIRED")
-        _strict_keys(value, {"url", "ref", "trustRole"}, {"url"}, "GIT_SOURCE")
+        strict_keys(value, {"url", "ref", "trustRole"}, {"url"}, "GIT_SOURCE")
         role = str(value.get("trustRole", "project"))
         if role not in TRUST_ROLES:
             raise DoDslValidationError("GIT_SOURCE_TRUST_ROLE_INVALID")
@@ -63,7 +57,7 @@ class WebSource:
     def from_dict(cls, value: Any) -> "WebSource":
         if not isinstance(value, dict):
             raise DoDslValidationError("WEB_SOURCE_OBJECT_REQUIRED")
-        _strict_keys(value, {"url", "trustRole", "method"}, {"url"}, "WEB_SOURCE")
+        strict_keys(value, {"url", "trustRole", "method"}, {"url"}, "WEB_SOURCE")
         role = str(value.get("trustRole", "internet"))
         method = str(value.get("method", "http"))
         if role not in TRUST_ROLES or method not in {"http", "playwright"}:
@@ -88,7 +82,7 @@ class ProjectRequest:
         if not isinstance(value, dict):
             raise DoDslValidationError("PROJECT_REQUEST_OBJECT_REQUIRED")
         allowed = {"schema", "projectId", "title", "gitSources", "webSources", "artifacts", "requestText"}
-        _strict_keys(value, allowed, {"schema", "projectId", "title"}, "PROJECT_REQUEST")
+        strict_keys(value, allowed, {"schema", "projectId", "title"}, "PROJECT_REQUEST")
         if value["schema"] != "dodsl-request/v1":
             raise DoDslValidationError("PROJECT_REQUEST_SCHEMA_INVALID")
         project_id = str(value["projectId"])
